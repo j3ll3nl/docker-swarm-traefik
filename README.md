@@ -3,13 +3,13 @@
 ## Develop
 
 ```bash
-git clone git@github.com:tylerbuchea/docker-multistage-nginx-express-.git
-cd docker-multistage-nginx-express-
+git clone git@github.com:j3ll3nl/docker-swarm-traefik.git
+cd docker-swarm-traefik
 ./ops start
 ```
 
 ## Build
 
 ```bash
-./ops build
+./ops build [ENV YAML]
 ```

@@ -9,7 +9,6 @@ configs:
     file: ./traefik.toml
 
 services:
-
   traefik:
     image: traefik
     ports:

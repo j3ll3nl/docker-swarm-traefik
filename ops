@@ -2,42 +2,31 @@
 
 script=${1}
 filename=${2:-dev}
-option=${3}
-
-docker_cloud_username="quangoinc"
-docker_cloud_reponame="quangosite-docker-traefik"
-docker_cloud_swarm_name="traefik"
 
 if [ -z $script ] ; then
   echo "please enter a command after ./ops"
 
 elif [ $script == "start" ] ; then
   echo "starting $filename"
-  docker-compose -f ./$filename.yml up
+  docker-machine ssh j3swarm-manager-1 "docker-compose -f ./$filename.yml up"
 
 elif [ $script == "stop" ] ; then
   echo "stopping $filename"
-  docker-compose -f ./$filename.yml down
+  docker-machine ssh j3swarm-manager-1 "docker-compose -f ./$filename.yml down"
 
 elif [ $script == "build" ] ; then
   echo "building $filename"
-  docker-compose -f ./$filename.yml build
+  docker-machine ssh j3swarm-manager-1 "docker-compose -f ./$filename.yml build"
 
 elif [ $script == "ship" ] ; then
   echo "shipping $filename"
   if [ "$filename" == "dev" ] ; then
     echo "Woops! don't try and ship $filename"
     exit
-  elif [ "$filename" == "stage" ] ; then
-    docker pull quangoinc/quango-docker-traefik
-  elif [ "$filename" == "prod" ] ; then
-    docker pull quangoinc/quango-docker-traefik
   elif [ $filename == "manager" ] ; then
-    docker network create --driver overlay proxy
+    docker-machine ssh j3swarm-manager-1 "docker network create --driver overlay proxy"
   fi
 
-  docker stack deploy \
-    --compose-file="$filename.yml" \
-    --with-registry-auth $docker_cloud_swarm_name
+  docker-machine ssh j3swarm-manager-1 "docker stack deploy -c $filename.yml"
 
 fi
