@@ -8,15 +8,15 @@ if [ -z $script ] ; then
 
 elif [ $script == "start" ] ; then
   echo "starting $filename"
-  docker-machine ssh j3swarm-manager-1 "docker-compose -f ./$filename.yml up"
+  docker-machine ssh j3swarm-manager-1 "docker stack deploy -c ./$filename.yml up" traefik
 
 elif [ $script == "stop" ] ; then
   echo "stopping $filename"
-  docker-machine ssh j3swarm-manager-1 "docker-compose -f ./$filename.yml down"
+  docker-machine ssh j3swarm-manager-1 "docker stack deploy -c ./$filename.yml down" traefik
 
 elif [ $script == "build" ] ; then
   echo "building $filename"
-  docker-machine ssh j3swarm-manager-1 "docker-compose -f ./$filename.yml build"
+  docker-machine ssh j3swarm-manager-1 "docker stack deploy -c ./$filename.yml build" traefik
 
 elif [ $script == "ship" ] ; then
   echo "shipping $filename"
@@ -24,9 +24,9 @@ elif [ $script == "ship" ] ; then
     echo "Woops! don't try and ship $filename"
     exit
   elif [ $filename == "manager" ] ; then
-    docker-machine ssh j3swarm-manager-1 "docker network create --driver overlay proxy"
+    //docker-machine ssh j3swarm-manager-1 "docker network create --driver overlay proxy"
   fi
 
-  docker-machine ssh j3swarm-manager-1 "docker stack deploy -c $filename.yml"
+  docker-machine ssh j3swarm-manager-1 "docker stack deploy -c $filename.yml " traefik
 
 fi
