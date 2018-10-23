@@ -9,6 +9,12 @@ defaultEntryPoints = ["http", "https"]
   [entryPoints.https]
   address = ":443"
     [entryPoints.https.tls]
+  [entryPoints.traefik]
+  address = ":8080"
+  [entryPoints.traefik.auth]
+    [entryPoints.traefik.auth.basic]
+    # get md5 from htpasswd or http://www.htaccesstools.com/htpasswd-generator/
+    users = ["admin:$apr1$I.fb7pJ2$L8rG92IlmEfzqWW87gCnM."]
 
 [acme]
   email = "dev@j3ll3.nl"
@@ -23,3 +29,6 @@ defaultEntryPoints = ["http", "https"]
   domain = "traefik"
   watch = true
   swarmmode = true
+
+[api]
+entrypoint="traefik"
